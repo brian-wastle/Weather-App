@@ -23,8 +23,8 @@
                 <p>Search by City</p>
 
                 <section class="col-3">
-                    <input class="row w-auto" type="search" placeholder="New York"></input>
-                    <button class="row w-auto" type="submit">Search</button>
+                    <input class="row w-auto" type="search" id="search-bar" placeholder="New York"></input>
+                    <button class="row w-auto" type="submit" id="search-button">Search</button>
                 </section>
                 
                 <hr>
@@ -41,16 +41,20 @@
             <!-- Current Day Forecast -->
             <main class="col-8 m-2">
                 <div>   
-                    <h3>City Name</h3>
-                    <p>Temp</p>
-                    <p>Wind</p>
-                    <p>Humidity</p>
+                    <div class="row">
+                        <h3 class="col py-2">City Name <span class="weather-icon">(icon)</span></h3>
+                        
+                    </div>
+                    <br>
+                    <p class="temperature">Temp</p>
+                    <p class="wind">Wind</p>
+                    <p class="humidity">Humidity</p>
                 </div> 
                 <hr>
 
-            <!-- 5-Day Forecase -->
-                <section class="row ">
-                    <h4>5-Day Forecast:</h4>
+            <!-- 5-Day Forecast -->
+                <section class="row">
+                    <h4 class="pb-2">5-Day Forecast:</h4>
 
                     <div class=" col-12 col-md-6 col-lg-4 col-xl-3 col-xxl-2 mb-1">
                         <div class="card">
