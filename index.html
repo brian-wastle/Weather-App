@@ -42,12 +42,14 @@
             <main class="col-8 m-2">
                 <div>   
                     <div class="row">
-                        <h3 class="col py-2">City Name <span class="weather-icon">(icon)</span></h3>
-                        
+                        <h3 class="col py-2" id="city-name">City Name </h3>
+                        <span><img class="weather-icon"></img></span>
                     </div>
                     <br>
                     <p class="temperature">Temp</p>
-                    <p class="wind">Wind</p>
+                    <p class="feels-like">Feels Like</p>
+                    <p class="wind-speed">Wind Speed</p>
+                    <p class="wind-direction">Wind Direction</p>
                     <p class="humidity">Humidity</p>
                 </div> 
                 <hr>
@@ -126,8 +128,13 @@
         </div>
     </div>
 
-
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/dayjs@1.11.3/dayjs.min.js"
+      integrity="sha256-iu/zLUB+QgISXBLCW/mcDi/rnf4m4uEDO0wauy76x7U="
+      crossorigin="anonymous"
+    ></script>
     <script src="./assets/js/script.js"></script>
 </body>
 </html>

@@ -2,13 +2,27 @@ let searchBar = document.querySelector("#search-bar");
 let searchButton = document.querySelector("#search-button")
 let queriedCity = '';
 let returnedCity = '';
-let infoArray = [];
 let fiveDayArray = [];
+
+let cityName = document.querySelector("#city-name");
+let currentTemp = document.querySelector(".temperature");
+let feelsLike = document.querySelector(".feels-like");
+let windSpeed = document.querySelector(".wind-speed");
+let windDirection = document.querySelector(".wind-direction"); //direction in degrees
+let weatherIcon = document.querySelector(".weather-icon");
+let humidity = document.querySelector(".humidity");
+// cityNameFive.textContent = fiveDayArray.city.name + " " + "(" + dayjs().format('MMMM D,YYYY') + ")";
+// currentTempFive.textContent = "Temperature: " + fiveDayArray.list[0].main.temp; //temp in Kelvins
+// feelsLikeFive.textContent = "Feels Like: " + fiveDayArray.list[0].main.feels_like;
+// windSpeedFive.textContent = "Wind Speed: " + fiveDayArray.list[0].wind.speed;
+// windDirectionFive.textContent = "Wind Direction: " + fiveDayArray.list[0].wind.deg; //direction in degrees
+// humidityFive.textContent = "Humidity: " + fiveDayArray.list[0].main.humidity;
+// weatherIconFive.src = "https://openweathermap.org/img/wn/" + fiveDayArray.list[0].weather[0].icon + "@2x.png";
 
 //search bar returns promise from openweather api
 //search bar where user can search for a city name
 searchButton.addEventListener("click", function() {
-        fetchWeather(searchBar.value);
+        fetchWeather(searchBar.value.trim());
     });
 
 //put this in an event listener so when user searches a city the fetch is run
@@ -37,7 +51,7 @@ function fetchWeather(input) {
                 //})();
             
 
-            return fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${returnedCity[1]}&lon=${returnedCity[2]}&appid=93a1211a2091533d81982e5d6d87d1ab`); //current forecast fetch
+            return fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${returnedCity[1]}&lon=${returnedCity[2]}&appid=93a1211a2091533d81982e5d6d87d1ab&units=imperial`); //current forecast fetch
 
 
         
@@ -47,33 +61,47 @@ function fetchWeather(input) {
             return response.json();
         })
         .then(function (data) {
-            infoArray = data;
+            fiveDayArray = data;
+            //current day weather at index 0
+            cityName.textContent = fiveDayArray.city.name + " " + "(" + dayjs().format('MMMM D,YYYY') + ")";
 
-            return fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${returnedCity[1]}&lon=${returnedCity[2]}&appid=93a1211a2091533d81982e5d6d87d1ab`); //5-day forecast fetch
+            currentTemp.textContent = "Temperature: " + fiveDayArray.list[0].main.temp; //temp in Kelvins
+            feelsLike.textContent = "Feels Like: " + fiveDayArray.list[0].main.feels_like;
+            
+            windSpeed.textContent = "Wind Speed: " + fiveDayArray.list[0].wind.speed;
+            windDirection.textContent = "Wind Direction: " + fiveDayArray.list[0].wind.deg; //direction in degrees
+            
+            humidity.textContent = "Humidity: " + fiveDayArray.list[0].main.humidity;
+        
+            weatherIcon.src = "https://openweathermap.org/img/wn/" + fiveDayArray.list[0].weather[0].icon + "@2x.png";
+
+
+            //5 day forecast
+            cityNameFive.textContent = fiveDayArray.city.name + " " + "(" + dayjs().format('MMMM D,YYYY') + ")";
+
+            currentTempFive.textContent = "Temperature: " + fiveDayArray.list[0].main.temp; //temp in Kelvins
+            feelsLikeFive.textContent = "Feels Like: " + fiveDayArray.list[0].main.feels_like;
+            
+            windSpeedFive.textContent = "Wind Speed: " + fiveDayArray.list[0].wind.speed;
+            windDirectionFive.textContent = "Wind Direction: " + fiveDayArray.list[0].wind.deg; //direction in degrees
+            
+            humidityFive.textContent = "Humidity: " + fiveDayArray.list[0].main.humidity;
+        
+            weatherIconFive.src = "https://openweathermap.org/img/wn/" + fiveDayArray.list[0].weather[0].icon + "@2x.png";
+            
         })
-        .then(function (response) {
-            return response.json();
-        })
-        .then(function (returnFiveDay) {
-            fiveDayArray = returnFiveDay;
-        })
+
+        // renderWeather();
+
 }
 
 //pull info from data, create an object, and push to an array
-function renderWeather() {
-    let cityName = infoArray.name;
+// function renderWeather() {
 
-}
+    
 
+// }
 
- //
-//infoArray
-//.list[0] //current weather
-//.wind.speed //current wind in mph
-//.weather[0].icon // weather icon
-//.main.* // feels_like, humidity, temp, max temp, min temp, pressure
-//.wind.deg // wind direction in degrees
-//infoArray[0].name
 
 
 //fiveDayArray.city.name
@@ -93,4 +121,10 @@ function renderWeather() {
 
 
 //pull from the array to populate city list on left column
+
+
+
+
+
+
 //when user clicks on one of the previously searched cities (event delegation -- event.target.matches(".button"), event.target.textContent), rerun the fetch and post the current weather to the center of the page
