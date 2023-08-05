@@ -21,7 +21,7 @@ let weatherIconFive = [];
 
 
 // 5day forecast vars
-let weatherStat = ["Temperature", "Feels Like", "Wind/Direction", "Humidity"]; //holds the ids for the 4 pieces of info on each 5 day forecast card
+let weatherStat = ["Max", "Min", "Feels Like", "Wind", "Humidity"]; //holds the ids for the 4 pieces of info on each 5 day forecast card
 
 
 // cityNameFive.textContent = fiveDayArray.city.name + " " + "(" + dayjs().format('MMMM D,YYYY') + ")";
@@ -78,21 +78,23 @@ function fetchWeather(input) {
             //5 day forecast
             for (let i = 0; i < 5; i++) {
 
-                let cardBody = document.querySelector(".card-body");
+                let maxTempFive = document.querySelector("#weather-stat" + (i * 10));
 
-                let currentTempFive = document.querySelector("#weather-stat" + (i * 10));
+                maxTempFive.textContent = "Max: " + fiveDayArray.list[(i + 1) * 7].main.temp; //temp in Kelvins
 
-                currentTempFive.textContent = "Temperature: " + fiveDayArray.list[(i + 1) * 7].main.temp; //temp in Kelvins
+                let minTempFive = document.querySelector("#weather-stat" + ((i * 10) + 1));
+
+                minTempFive.textContent = "Min: " + fiveDayArray.list[(i + 1) * 7].main.temp; //temp in Kelvins
                 
-                let feelsLikeFive = document.querySelector("#weather-stat" + ((i * 10) + 1));
+                let feelsLikeFive = document.querySelector("#weather-stat" + ((i * 10) + 2));
                 
                 feelsLikeFive.textContent = "Feels Like: " + fiveDayArray.list[(i + 1) * 7].main.feels_like;
                 
-                let windSpeedFive = document.querySelector("#weather-stat" + ((i * 10) + 2));
+                let windSpeedFive = document.querySelector("#weather-stat" + ((i * 10) + 3));
 
                 windSpeedFive.textContent = "Wind Speed: " + fiveDayArray.list[(i + 1) * 7].wind.speed + " at " + fiveDayArray.list[i * 8].wind.deg;
                 
-                let humidityFive = document.querySelector("#weather-stat" + ((i * 10) + 3));
+                let humidityFive = document.querySelector("#weather-stat" + ((i * 10) + 4));
 
                 humidityFive.textContent = "Humidity: " + fiveDayArray.list[(i + 1) * 7].main.humidity;
             
@@ -120,7 +122,7 @@ function fetchWeather(input) {
             currentArray = currentData;
 
             //current day weather at index 0
-            cityName.textContent = currentArray.name + " " + "(" + dayjs.unix(1691258400).format('MMMM D,YYYY HH:MM:ss') + ")";
+            cityName.textContent = currentArray.name + " " + "(" + dayjs.unix(1691258400).format('MMMM D,YYYY') + ")";
 
             currentTemp.textContent = "Temperature: " + currentArray.main.temp; //temp in Kelvins
             feelsLike.textContent = "Feels Like: " + currentArray.main.feels_like;
@@ -178,7 +180,7 @@ for (let i = 0; i < 5; i++) {
     
    
     //4 p tags with class card-text and id unique to weather stat represented
-    for (let j = 0; j < 4; j++) {
+    for (let j = 0; j < 5; j++) {
         let weatherStats = document.createElement("p");
         weatherStats.className = "card-text";
         weatherStats.id = "weather-stat" + (i * 10 + j);
