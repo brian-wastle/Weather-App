@@ -1,5 +1,5 @@
-let searchBar = document.querySelector("#search-bar");
-let searchButton = document.querySelector("#search-button")
+let searchBar = document.querySelector(".search-bar");
+let searchButton = document.querySelector(".search-button")
 let queriedCity = '';
 let returnedCity = '';
 let fiveDayArray = [];
@@ -11,6 +11,11 @@ let windSpeed = document.querySelector(".wind-speed");
 let windDirection = document.querySelector(".wind-direction"); //direction in degrees
 let weatherIcon = document.querySelector(".weather-icon");
 let humidity = document.querySelector(".humidity");
+
+// 5day forecast vars
+let weatherStat = []; //holds the ids for the 4 pieces of info on each 5 day forecast card
+
+
 // cityNameFive.textContent = fiveDayArray.city.name + " " + "(" + dayjs().format('MMMM D,YYYY') + ")";
 // currentTempFive.textContent = "Temperature: " + fiveDayArray.list[0].main.temp; //temp in Kelvins
 // feelsLikeFive.textContent = "Feels Like: " + fiveDayArray.list[0].main.feels_like;
@@ -88,36 +93,76 @@ function fetchWeather(input) {
             humidityFive.textContent = "Humidity: " + fiveDayArray.list[0].main.humidity;
         
             weatherIconFive.src = "https://openweathermap.org/img/wn/" + fiveDayArray.list[0].weather[0].icon + "@2x.png";
+
+
+            //display weather on cards
+
+
+
+
             
         })
 
-        // renderWeather();
+        
 
 }
 
-//pull info from data, create an object, and push to an array
-// function renderWeather() {
 
+//generate cards
+
+for (let i = 0; i < 5; i++) {    
+    //create a div 
+    let forecastCards = document.createElement("div");
+    forecastCards.className = "col-12 col-md-6 col-lg-4 col-xl-3 col-xxl-2 mb-1";
     
+    
+    //create a div with class "card"
+    let classCard = document.createElement("div");
+    classCard.className = "card";
+    
+    //create a div with class "card-body"
+    let classCardBody = document.createElement("div");
+    classCardBody.className = "card-body";
+    
+    //h5 with class "card-title" and text content "Day 1" through "Day 5"
+    for (let j = 1; j <= 5; j++) {
+        let weekDays[j] = document.createElement("h5");
+        weekDays.textContent = "Day " + (j);
+    }
+   
+    
+    //4 p tags with class card-text and id unique to weather stat represented
+    for (let k = 0; k < 4; k++) {
+        let weatherStats = document.createElement("p");
+        weatherStats.className = "card-text";
+        weatherStats.id = weatherStat[i,k];
+    }
+    
+    //append to section element with id "five-day-forecast"
+    let hourBlock3 = document.createElement("i");
+    hourBlock3.className = "btninput fas fa-save";
+    hourBlock3.id = tempArray[i].time;
+    hourBlock3.setAttribute("aria-hidden", "true");
+  
+    //hourBlock1.value = localStorage.getItem(tempArray[i]);
+    hourContainer.appendChild(hourBlock);
+    hourBlock.appendChild(hourBlock0);
+    hourBlock.appendChild(hourBlock1);
+    hourBlock.appendChild(hourBlock2);
+    hourBlock2.appendChild(hourBlock3);
 
-// }
+
+        //  vvvv  DELETE vvvv
+    forecastCards.setAttribute("data-time", tempArray[i].time);
+  };
 
 
 
-//fiveDayArray.city.name
-//
-//fiveDayArray.list[0]
-//.main.temp
-//.feels_like
-//.temp-max
-//.temp-min
-//.humidity
-//
-//fiveDayArray.list[0].wind
-//.speed
-//.deg //direction
-//
-//fiveDayArray.list[0].weather[0].icon
+//create element
+
+//set text content
+
+//append to page
 
 
 //pull from the array to populate city list on left column
