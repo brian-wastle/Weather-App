@@ -11,9 +11,11 @@ let windSpeed = document.querySelector(".wind-speed");
 let windDirection = document.querySelector(".wind-direction"); //direction in degrees
 let weatherIcon = document.querySelector(".weather-icon");
 let humidity = document.querySelector(".humidity");
+let fiveDayContainer = document.querySelector("#five-day-forecast");
+
 
 // 5day forecast vars
-let weatherStat = []; //holds the ids for the 4 pieces of info on each 5 day forecast card
+let weatherStat = ["Temperature", "Feels Like", "Wind/Direction", "Humidity"]; //holds the ids for the 4 pieces of info on each 5 day forecast card
 
 
 // cityNameFive.textContent = fiveDayArray.city.name + " " + "(" + dayjs().format('MMMM D,YYYY') + ")";
@@ -115,45 +117,50 @@ for (let i = 0; i < 5; i++) {
     let forecastCards = document.createElement("div");
     forecastCards.className = "col-12 col-md-6 col-lg-4 col-xl-3 col-xxl-2 mb-1";
     
-    
+    fiveDayContainer.appendChild(forecastCards);
+
     //create a div with class "card"
     let classCard = document.createElement("div");
     classCard.className = "card";
+    
+    forecastCards.appendChild(classCard);
     
     //create a div with class "card-body"
     let classCardBody = document.createElement("div");
     classCardBody.className = "card-body";
     
+    classCard.appendChild(classCardBody);
+
     //h5 with class "card-title" and text content "Day 1" through "Day 5"
-    for (let j = 1; j <= 5; j++) {
-        let weekDays[j] = document.createElement("h5");
-        weekDays.textContent = "Day " + (j);
-    }
+
+        let weekDays = [];
+        weekDays[i] = document.createElement("h5");
+        weekDays[i].className = "card-title";
+        weekDays[i].textContent = "Day " + (i);
+        classCardBody.appendChild(weekDays[i]); 
+    
    
-    
     //4 p tags with class card-text and id unique to weather stat represented
-    for (let k = 0; k < 4; k++) {
-        let weatherStats = document.createElement("p");
-        weatherStats.className = "card-text";
-        weatherStats.id = weatherStat[i,k];
-    }
-    
+        for (let j = 0; j < 4; j++) {
+            let weatherStats = document.createElement("p");
+            weatherStats.className = "card-text";
+            weatherStats.id = "weather-stat" +[j];
+            weatherStats.textContent = weatherStat[j];
+
+            classCardBody.appendChild(weatherStats); 
+        }
+
     //append to section element with id "five-day-forecast"
-    let hourBlock3 = document.createElement("i");
-    hourBlock3.className = "btninput fas fa-save";
-    hourBlock3.id = tempArray[i].time;
-    hourBlock3.setAttribute("aria-hidden", "true");
+    
+    
+
+
   
     //hourBlock1.value = localStorage.getItem(tempArray[i]);
-    hourContainer.appendChild(hourBlock);
-    hourBlock.appendChild(hourBlock0);
-    hourBlock.appendChild(hourBlock1);
-    hourBlock.appendChild(hourBlock2);
-    hourBlock2.appendChild(hourBlock3);
 
 
         //  vvvv  DELETE vvvv
-    forecastCards.setAttribute("data-time", tempArray[i].time);
+    
   };
 
 
