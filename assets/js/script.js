@@ -25,6 +25,12 @@ let previousCities = JSON.parse(localStorage.getItem("previousCities")) || [];
 let cityContainer = document.querySelector("#city-container");
 let tempId = '';
 
+let topCities = ["New York", "Chicago", "Los Angeles", "Dallas", "San Diego", "San Francisco", "Houston", "San Antonio", "Philadelphia", "Detroit", "Atlanta", "Phoenix", "Seattle", "Denver", "New Orleans", "Austin"];
+
+let cityInt = Math.floor(Math.random() * topCities.length);
+
+fetchWeather(topCities[cityInt]);
+
 renderCitiesList();
 
 //listener for search bar where user can search for a city name
@@ -39,6 +45,14 @@ searchButton.addEventListener("click", function() {
         clearCitiesList();
         renderCitiesList();
     });
+
+//listener for previously searched city buttons below search bar
+cityContainer.addEventListener("click", function(event) {
+    if (event.target.matches(".city-button")) {
+        fetchWeather(event.target.value);
+        }
+});
+
 
 
     //generate cards
@@ -86,7 +100,6 @@ for (let i = 0; i < 5; i++) {
         weatherStats.className = "card-text";
         weatherStats.id = "weather-stat" + (i * 10 + j);
         weatherStats.textContent = weatherStat[j];
-        
         classCardBody.appendChild(weatherStats); 
     }
     
@@ -115,7 +128,7 @@ function renderCitiesList() {
         console.log(previousCities[i]);
         //create element
         let newDiv = document.createElement("input");
-        newDiv.className = "btn btn-primary m-1";
+        newDiv.className = "btn btn-primary m-1 city-button";
         newDiv.setAttribute("type", "button")
         newDiv.id = "city-name-" + i;
         newDiv.value = previousCities[i];
