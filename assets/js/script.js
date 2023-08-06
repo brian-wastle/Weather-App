@@ -18,27 +18,112 @@ let weekDays = [];
 let iconFiveDay = [];
 let iconFiveDayImg = [];
 let weatherIconFive = [];
+let weatherStat = ["Max", "Min", "Feels Like", "Wind", "Humidity"]; //holds the ids for the 5 pieces of info on each 5 day forecast cards
 
+let previousCities = JSON.parse(localStorage.getItem("previousCities")) || [];
 
-// 5day forecast vars
-let weatherStat = ["Max", "Min", "Feels Like", "Wind", "Humidity"]; //holds the ids for the 4 pieces of info on each 5 day forecast card
+let cityContainer = document.querySelector("#city-container");
+let tempId = '';
 
+renderCitiesList();
 
-// cityNameFive.textContent = fiveDayArray.city.name + " " + "(" + dayjs().format('MMMM D,YYYY') + ")";
-// currentTempFive.textContent = "Temperature: " + fiveDayArray.list[0].main.temp; //temp in Kelvins
-// feelsLikeFive.textContent = "Feels Like: " + fiveDayArray.list[0].main.feels_like;
-// windSpeedFive.textContent = "Wind Speed: " + fiveDayArray.list[0].wind.speed;
-// windDirectionFive.textContent = "Wind Direction: " + fiveDayArray.list[0].wind.deg; //direction in degrees
-// humidityFive.textContent = "Humidity: " + fiveDayArray.list[0].main.humidity;
-// weatherIconFive.src = "https://openweathermap.org/img/wn/" + fiveDayArray.list[0].weather[0].icon + "@2x.png";
-
-//search bar returns promise from openweather api
-//search bar where user can search for a city name
+//listener for search bar where user can search for a city name
 searchButton.addEventListener("click", function() {
         fetchWeather(searchBar.value.trim());
+        previousCities.unshift(searchBar.value);
+        if (previousCities.length > 8) {
+            previousCities = previousCities.slice(0, 8);
+        }
+        localStorage.setItem("previousCities", JSON.stringify(previousCities));
+        searchBar.value = '';
+        clearCitiesList();
+        renderCitiesList();
     });
 
-//put this in an event listener so when user searches a city the fetch is run
+
+    //generate cards
+    
+for (let i = 0; i < 5; i++) {    
+    //create a div 
+    let forecastCards = document.createElement("div");
+    forecastCards.className = "col-12 col-md-6 col-lg-4 col-xl-3 col-xxl-2 mb-1";
+    
+    fiveDayContainer.appendChild(forecastCards);
+    
+    //create a div with class "card"
+    let classCard = document.createElement("div");
+    classCard.className = "card";
+    
+    forecastCards.appendChild(classCard);
+    
+    //create a div with class "card-body"
+    let classCardBody = document.createElement("div");
+    classCardBody.className = "card-body";
+    
+    classCard.appendChild(classCardBody);
+    
+    //h5 with class "card-title" and text content "Day 1" through "Day 5"
+    
+    
+    weekDays[i] = document.createElement("h5");
+    weekDays[i].className = "card-title";
+    weekDays[i].textContent = dayjs().add(i + 1, 'day').format('MMMM D,YYYY');   
+    
+    iconFiveDay[i] = document.createElement("span");
+    iconFiveDayImg[i] = document.createElement("img");
+    iconFiveDayImg[i].className = "weather-icon-five-" + i;
+    
+    classCardBody.appendChild(weekDays[i]); 
+    iconFiveDay[i].appendChild(iconFiveDayImg[i]); 
+    classCardBody.appendChild(iconFiveDay[i]); 
+    
+    
+    
+    
+    //4 p tags with class card-text and id unique to weather stat represented
+    for (let j = 0; j < 5; j++) {
+        let weatherStats = document.createElement("p");
+        weatherStats.className = "card-text";
+        weatherStats.id = "weather-stat" + (i * 10 + j);
+        weatherStats.textContent = weatherStat[j];
+        
+        classCardBody.appendChild(weatherStats); 
+    }
+    
+};
+
+
+
+//pull cities from the array in localStorage to populate city list on left column
+
+//when user clicks on one of the previously searched cities (event delegation -- event.target.matches(".button"), event.target.textContent), rerun the fetch and post the current weather to the center of the page
+
+function clearCitiesList() {
+        if (previousCities.length > 0) {
+        for (let i = 0; i < previousCities.length; i++) {
+            tempId = document.getElementById("city-name-" + i); //this isnt coming up as a node item, tempId is returning 'null'
+            if (!tempId == '') {
+            cityContainer.removeChild(tempId);
+            }
+        }
+    }
+}
+
+
+function renderCitiesList() {
+    for (let i = 0; i < previousCities.length; i++) {
+        console.log(previousCities[i]);
+        //create element
+        let newDiv = document.createElement("input");
+        newDiv.className = "btn btn-primary m-1";
+        newDiv.setAttribute("type", "button")
+        newDiv.id = "city-name-" + i;
+        newDiv.value = previousCities[i];
+        cityContainer.appendChild(newDiv); 
+    }
+}
+
+
 function fetchWeather(input) {
     // queriedCity = input; 
     fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${input}&limit=5&appid=93a1211a2091533d81982e5d6d87d1ab`) //geo fetch
@@ -101,16 +186,7 @@ function fetchWeather(input) {
                
                 iconFiveDayImg[i].src = "https://openweathermap.org/img/wn/" + fiveDayArray.list[i].weather[0].icon + ".png";
                 
-            }
-            
-                //[7, 15, 23] <== ids
-
-            //display weather on cards
-
-            
-
-
-            
+            } 
         })
         .then(function (getCurrentData) {
             return fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${returnedCity[1]}&lon=${returnedCity[2]}&appid=93a1211a2091533d81982e5d6d87d1ab&units=imperial`) //current fetch
@@ -140,81 +216,10 @@ function fetchWeather(input) {
 }
 
 
-//generate cards
+//geolocate to populate first city info
 
-for (let i = 0; i < 5; i++) {    
-    //create a div 
-    let forecastCards = document.createElement("div");
-    forecastCards.className = "col-12 col-md-6 col-lg-4 col-xl-3 col-xxl-2 mb-1";
-    
-    fiveDayContainer.appendChild(forecastCards);
+//draw a map of searched location with separate api
 
-    //create a div with class "card"
-    let classCard = document.createElement("div");
-    classCard.className = "card";
-    
-    forecastCards.appendChild(classCard);
-    
-    //create a div with class "card-body"
-    let classCardBody = document.createElement("div");
-    classCardBody.className = "card-body";
-    
-    classCard.appendChild(classCardBody);
+//convert wind direction to cardinal direction
 
-    //h5 with class "card-title" and text content "Day 1" through "Day 5"
-
-    
-    weekDays[i] = document.createElement("h5");
-    weekDays[i].className = "card-title";
-    weekDays[i].textContent = dayjs().add(i + 1, 'day').format('MMMM D,YYYY');   
-    
-    iconFiveDay[i] = document.createElement("span");
-    iconFiveDayImg[i] = document.createElement("img");
-    iconFiveDayImg[i].className = "weather-icon-five-" + i;
-   
-    classCardBody.appendChild(weekDays[i]); 
-    iconFiveDay[i].appendChild(iconFiveDayImg[i]); 
-    classCardBody.appendChild(iconFiveDay[i]); 
-    
-    
-    
-   
-    //4 p tags with class card-text and id unique to weather stat represented
-    for (let j = 0; j < 5; j++) {
-        let weatherStats = document.createElement("p");
-        weatherStats.className = "card-text";
-        weatherStats.id = "weather-stat" + (i * 10 + j);
-        weatherStats.textContent = weatherStat[j];
-
-        classCardBody.appendChild(weatherStats); 
-    }
-
-    
-    
-
-
-  
-    //hourBlock1.value = localStorage.getItem(tempArray[i]);
-
-
-        //  vvvv  DELETE vvvv
-    
-  };
-
-
-
-//create element
-
-//set text content
-
-//append to page
-
-
-//pull from the array to populate city list on left column
-
-
-
-
-
-
-//when user clicks on one of the previously searched cities (event delegation -- event.target.matches(".button"), event.target.textContent), rerun the fetch and post the current weather to the center of the page
+//add units of measurement
