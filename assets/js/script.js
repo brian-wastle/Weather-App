@@ -93,7 +93,6 @@ for (let i = 0; i < 5; i++) {
     
     
     
-    
     //4 p tags with class card-text and id unique to weather stat represented
     for (let j = 0; j < 5; j++) {
         let weatherStats = document.createElement("p");
