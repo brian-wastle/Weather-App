@@ -19,6 +19,9 @@ To get weather for a particular city, enter the name in the search bar on the le
 
 ![screenshot of weather app webpage](./assets/images/screenshot.png)
 
+
+https://brian-wastle.github.io/Weather-App/
+
 ## Credits
 
 OpenWeather API - https://openweathermap.org/
