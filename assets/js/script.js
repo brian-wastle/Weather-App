@@ -177,23 +177,24 @@ function fetchWeather(input) {
 
                 let maxTempFive = document.querySelector("#weather-stat" + (i * 10));
 
-                maxTempFive.textContent = "Max: " + fiveDayArray.list[(i + 1) * 7].main.temp; //temp in Kelvins
+                maxTempFive.textContent = "Max: " + fiveDayArray.list[(i + 1) * 7].main.temp_max + "\u00B0"; 
 
                 let minTempFive = document.querySelector("#weather-stat" + ((i * 10) + 1));
 
-                minTempFive.textContent = "Min: " + fiveDayArray.list[(i + 1) * 7].main.temp; //temp in Kelvins
+                minTempFive.textContent = "Min: " + fiveDayArray.list[(i + 1) * 7].main.temp_min + "\u00B0"; 
                 
                 let feelsLikeFive = document.querySelector("#weather-stat" + ((i * 10) + 2));
                 
-                feelsLikeFive.textContent = "Feels Like: " + fiveDayArray.list[(i + 1) * 7].main.feels_like;
+                feelsLikeFive.textContent = "Feels Like: " + fiveDayArray.list[(i + 1) * 7].main.feels_like + "\u00B0";
                 
                 let windSpeedFive = document.querySelector("#weather-stat" + ((i * 10) + 3));
 
-                windSpeedFive.textContent = "Wind Speed: " + fiveDayArray.list[(i + 1) * 7].wind.speed + " at " + fiveDayArray.list[i * 8].wind.deg;
+                let windDir = getDirection(fiveDayArray.list[i * 8].wind.deg);
+                windSpeedFive.textContent = "Wind Speed: " + fiveDayArray.list[(i + 1) * 7].wind.speed + " mph " + windDir;
                 
                 let humidityFive = document.querySelector("#weather-stat" + ((i * 10) + 4));
 
-                humidityFive.textContent = "Humidity: " + fiveDayArray.list[(i + 1) * 7].main.humidity;
+                humidityFive.textContent = "Humidity: " + fiveDayArray.list[(i + 1) * 7].main.humidity + "%";
             
                
                 iconFiveDayImg[i].src = "https://openweathermap.org/img/wn/" + fiveDayArray.list[i].weather[0].icon + ".png";
@@ -212,13 +213,14 @@ function fetchWeather(input) {
             //current day weather at index 0
             cityName.textContent = currentArray.name + " " + "(" + dayjs.unix(1691258400).format('MMMM D,YYYY') + ")";
 
-            currentTemp.textContent = "Temperature: " + currentArray.main.temp; //temp in Kelvins
-            feelsLike.textContent = "Feels Like: " + currentArray.main.feels_like;
+            currentTemp.textContent = "Temperature: " + currentArray.main.temp + "\u00B0"; //temp in Kelvins
+            feelsLike.textContent = "Feels Like: " + currentArray.main.feels_like + "\u00B0";
             
-            windSpeed.textContent = "Wind Speed: " + currentArray.wind.speed;
-            windDirection.textContent = "Wind Direction: " + currentArray.wind.deg; //direction in degrees
+            windSpeed.textContent = "Wind Speed: " + currentArray.wind.speed + " mph";
+            let windDir = getDirection(currentArray.wind.deg);
+            windDirection.textContent = "Wind Direction: " + windDir + "\u00B0"; //direction in degrees
             
-            humidity.textContent = "Humidity: " + currentArray.main.humidity;
+            humidity.textContent = "Humidity: " + currentArray.main.humidity + "%";
         
             weatherIcon.src = "https://openweathermap.org/img/wn/" + currentArray.weather[0].icon + "@2x.png";
         })
@@ -228,10 +230,23 @@ function fetchWeather(input) {
 }
 
 
-//geolocate to populate first city info
+function getDirection(angle) {
+	// We divide it into 16 sections
+	let directions = ["N","NNE","NE","ENE","E",
+		"ESE", "SE", "SSE","S",
+		"SSW","SW","WSW","W",
+		"WNW","NW","NNW" ];
+	// This means, every 360 / 16 degree, there's a section change
+	// So, in our case, every 22.5 degree, there's a section change
+	// In order to get the correct section, we just need to divide
+	let section = parseInt( angle/22.5 + 0.5 );
+	// If our result comes to be x.6, which should normally be rounded off to
+	// int(x) + 1, but parseInt doesn't care about it
+	// Hence, we are adding 0.5 to it
 
-//draw a map of searched location with separate api
+	// Now we know the section, just need to make sure it's under 16
+	section = section % 16;
 
-//convert wind direction to cardinal direction
-
-//add units of measurement
+	// Now we can return it
+	return directions[section];
+}

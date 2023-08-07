@@ -24,4 +24,8 @@ https://brian-wastle.github.io/Weather-App/
 
 ## Credits
 
-OpenWeather API - https://openweathermap.org/
+OpenWeather API - 
+https://openweathermap.org/
+
+Converting wind speed in degrees to cardinal directions - 
+KAKAN (2021, February 14). getDirection.js. GitHub Gist. https://gist.github.com/theKAKAN/b40bf54144a6eb90313ad00681e3fbcc
